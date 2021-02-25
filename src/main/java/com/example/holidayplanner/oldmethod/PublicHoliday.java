@@ -1,8 +1,8 @@
-package com.example.holidayplanner.publicholidays;
+package com.example.holidayplanner.oldmethod;
 
 import java.util.Calendar;
 
-public class PublicHolidays {
+public class PublicHoliday {
 
 
     public boolean isPublicHoliday(Calendar calendar) {
