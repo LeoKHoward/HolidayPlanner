@@ -1,11 +1,14 @@
-package com.example.holidayplanner.publicholidays;
+package com.example.holidayplanner.services;
 
+import com.example.holidayplanner.publicholidays.Event;
+import com.example.holidayplanner.publicholidays.Root;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class EventsLoader {
@@ -18,6 +21,6 @@ public class EventsLoader {
 
         ResponseEntity<Root> responseEntity = restTemplate.getForEntity(PUBLIC_HOLIDAY_URL, Root.class);
 
-        return responseEntity.getBody().getEnglandAndWales().getEvents();
+        return Objects.requireNonNull(responseEntity.getBody()).getEnglandAndWales().getEvents();
     }
 }
