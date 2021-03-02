@@ -1,16 +1,49 @@
-package com.example.holidayplanner.services;
+package com.example.holidayplanner;
 
 import com.example.holidayplanner.employee.EmployeeDetails;
-import org.springframework.stereotype.Component;
+import com.example.holidayplanner.projectdetails.ProjectRequirements;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-public class EmployeeSetUp {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    public List<EmployeeDetails> setAllEmployeeDetails() {
+
+class ThePostStartUpClassTest {
+
+    @Test
+    public void setTestAssigningEmployeesToProject() {
+
+        List<EmployeeDetails> testEmployeeDetails = setAllEmployeeDetails();
+
+        ProjectRequirements testProject = new ProjectRequirements(1,
+                2, 1, 60);
+
+        ThePostStartUpClass thePostStartUpClass = new ThePostStartUpClass(null, null);
+
+        List<EmployeeDetails> result = thePostStartUpClass.assignPeopleToProject(testProject,
+                null, testEmployeeDetails);
+
+        assertThat(result.size()).isEqualTo(4);
+
+        EmployeeDetails businessAnalyst = result.get(0);
+        assertThat(businessAnalyst.getFirstName()).isEqualTo("Jack");
+
+        EmployeeDetails softwareEngineer1 = result.get(1);
+        assertThat(softwareEngineer1.getFirstName()).isEqualTo("Willy");
+
+        EmployeeDetails softwareEngineer2 = result.get(2);
+        assertThat(softwareEngineer2.getFirstName()).isEqualTo("Sweeney");
+
+        EmployeeDetails testAnalyst = result.get(3);
+        assertThat(testAnalyst.getFirstName()).isEqualTo("Barnabas");
+
+
+    }
+
+    private List<EmployeeDetails> setAllEmployeeDetails() {
         EmployeeDetails employee1 =
                 new EmployeeDetails(
                         "Jack",
@@ -54,17 +87,15 @@ public class EmployeeSetUp {
                         (LocalDate.of(2021, 6, 1)),
                         (LocalDate.of(2021, 6, 30)));
 
-        List<EmployeeDetails> employees = new ArrayList<>();
-        employees.add(employee1);
-        employees.add(employee2);
-        employees.add(employee3);
-        employees.add(employee4);
-        employees.add(employee5);
-        employees.add(employee6);
+        List<EmployeeDetails> testEmployeesList = new ArrayList<>();
+        testEmployeesList.add(employee1);
+        testEmployeesList.add(employee2);
+        testEmployeesList.add(employee3);
+        testEmployeesList.add(employee4);
+        testEmployeesList.add(employee5);
+        testEmployeesList.add(employee6);
 
-        return employees;
+        return testEmployeesList;
 
     }
-
-
 }

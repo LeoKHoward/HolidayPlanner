@@ -15,7 +15,7 @@ public class EventsLoader {
 
     private static final String PUBLIC_HOLIDAY_URL = "https://www.gov.uk/bank-holidays.json";
 
-    public List<Event> getBankHols() throws URISyntaxException {
+    public List<Event> getBankHols() {
 
         RestTemplate restTemplate = new RestTemplate();
 
