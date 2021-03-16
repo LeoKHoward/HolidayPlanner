@@ -16,10 +16,23 @@ public class EmployeeService {
 
         List<EmployeeDetails> teamMembers = new ArrayList<>();
 
+        HolidayService holidayService = new HolidayService();
+
+        /*
+        I need to access employee holidays and see if the flag for on annual leave is true
+
+        If it is true then they will be unable to be picked from list below
+
+        If two are required for a role and one or both is unavailable then project start date needs to move
+
+         */
+
+
         List<EmployeeDetails> businessAnalysts = allEmployees.stream()
                 .filter(e -> e.getEmployeeRole().equals("Business Analyst"))
                 .limit(projectRequirements.getNoOfBusinessAnalystsRequired())
                 .collect(Collectors.toList());
+
 
         teamMembers.addAll(businessAnalysts);
 
@@ -37,13 +50,6 @@ public class EmployeeService {
 
         teamMembers.addAll(testAnalysts);
 
-//        figureOutBestStartDateBasedOnTeamMembersAnnualLeave();
-//
-//        for (EmployeeDetails teamMember : teamMembers) {
-//            if (teamMember.getEmployeeRole().contains("Business") && teamMember.isOnAnnualLeave()) {
-//                teamMembers.remove(teamMember);
-//            }
-//        }
 
         for (EmployeeDetails teamMember : teamMembers) {
             System.out.println(teamMember.getFirstName() + " " + teamMember.getLastName() + " - "
@@ -53,6 +59,22 @@ public class EmployeeService {
         return teamMembers;
 
     }
+
+//    private List<EmployeeDetails> getEmployeeByType(List<EmployeeDetails> allEmployees, String employeeTitle,
+//                                                    int noOfBusinessAnalystsRequired) {
+//        return allEmployees.stream()
+//                .filter(e -> e.getEmployeeRole().equals(employeeTitle))
+//                .limit(noOfBusinessAnalystsRequired)
+//                .collect(Collectors.toList());
+//    }
+
+//    public void chooseDifferentEmployeeIfFirstIsOnLeave() {
+//
+//        HolidayService holidayService = new HolidayService();
+//
+//
+//
+//    }
 
 
 }
