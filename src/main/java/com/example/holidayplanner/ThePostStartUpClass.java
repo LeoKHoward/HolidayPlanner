@@ -6,7 +6,6 @@ import com.example.holidayplanner.publicholidays.Event;
 import com.example.holidayplanner.services.EmployeeService;
 import com.example.holidayplanner.employee.EmployeeSetUp;
 import com.example.holidayplanner.services.HolidayService;
-import com.example.holidayplanner.services.ProjectService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -15,56 +14,86 @@ import java.util.List;
 @Component
 public class ThePostStartUpClass {
 
+    /*
+    Set up constructor to allow all necessary classes to be accessed
+    */
+
     private final HolidayService holidayService;
     private final EmployeeSetUp employeeSetUp;
     private final EmployeeService employeeService;
-    private final ProjectService projectService;
 
 
     public ThePostStartUpClass(HolidayService holidayService, EmployeeSetUp employeeSetUp,
-                               EmployeeService employeeService, ProjectService projectService) {
+                               EmployeeService employeeService) {
 
         this.holidayService = holidayService;
         this.employeeSetUp = employeeSetUp;
         this.employeeService = employeeService;
-        this.projectService = projectService;
     }
 
     @PostConstruct
     public void oneMethodToRuleThemAll() {
 
+        /*
+        Call GOV.uk API to get bank holidays from JSON
+        */
         List<Event> bankHols = holidayService.getBankHols();
 
         System.out.println("\n");
 
-        showLoadingOfBankHols();
+        /*
+        Print out all England/Wales bank holidays from API
+        */
+        getEnglandAndWalesBankHolidayDatesAndTitles();
 
         System.out.println("\n");
 
-        showSettingUpEmployees();
+        /*
+        Print out all employees in the company
+        */
+        List<EmployeeDetails> companyEmployees = getAllCompanyEmployeeDetails();
 
         System.out.println("\n");
 
-        List<EmployeeDetails> allEmployees = employeeSetUp.getAllEmployeeDetails();
 
+        /*
+        Specify required number BAs/SEs/TAs and total expected business days in project length
+        */
         ProjectRequirements projectOne = new ProjectRequirements(1,
                 2, 1, 14);
 
 
+        /*
+        Print out all employees in the company
+        */
         holidayService.workoutProjectEndDateAndIfItIncludesBankHols(projectOne, bankHols);
 
         System.out.println("\n");
 
+
+        /*
+        Print out all employees assigned to project based on numbers required above
+        */
         System.out.println("Employees assigned to project:");
-        employeeService.assignPeopleToProject(projectOne, allEmployees);
+        List<EmployeeDetails> projectTeamMembers = employeeService.assignPeopleToProject(projectOne, companyEmployees);
 
         System.out.println("\n");
 
-        holidayService.findOutIfEmployeeOnAnnualLeaveDuringProjectLifeSpan(allEmployees, );
+
+        /*
+        If a team member is on leave on any days in project life span, this prints out who they are,
+        what they do and what day(s) they are on leave that clash with a project day
+        */
+        holidayService.determineWhenEmployeeIsOnAnnualLeave(projectTeamMembers);
+
 
     }
 
-    private void showLoadingOfBankHols() {
+
+    /*
+    Organise bank holiday dates and title into a readable format
+    */
+    private void getEnglandAndWalesBankHolidayDatesAndTitles() {
         List<Event> eventList = holidayService.getBankHols();
 
         for (Event b : eventList) {
@@ -72,13 +101,16 @@ public class ThePostStartUpClass {
         }
     }
 
-    public void showSettingUpEmployees() {
-        List<EmployeeDetails> employees = employeeSetUp.getAllEmployeeDetails();
+    /*
+    Get details of all employees at company that could potentially be chosen to be in the team
+    */
+    private List<EmployeeDetails> getAllCompanyEmployeeDetails() {
+        List<EmployeeDetails> companyEmployees = employeeSetUp.getAllEmployeeDetails();
 
-        for (EmployeeDetails employee : employees) {
-            System.out.println(employee);
+        for (EmployeeDetails companyEmployee : companyEmployees) {
+            System.out.println(companyEmployee);
         }
-
+        return companyEmployees;
     }
 
 

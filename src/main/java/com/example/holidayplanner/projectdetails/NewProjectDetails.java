@@ -12,9 +12,15 @@ import java.util.List;
 @Data
 public class NewProjectDetails {
 
+    /*
+    Fields will be completed when the application is run
+    Parameters are set in ThePostStartUp Class which will effect the results of the fields below
+    */
+
     private LocalDate projectSuggestedStartDate;
     private LocalDate projectSuggestedEndDate;
     private List<EmployeeDetails> employeeDetails;
     private List<Event> event;
+    private List<LocalDate> allDaysInProjectLifeSpan;
 
 }

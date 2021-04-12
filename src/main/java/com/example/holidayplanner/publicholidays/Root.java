@@ -6,6 +6,10 @@ import lombok.Data;
 @Data
 public class Root {
 
+    /*
+    Specifically gets bank holidays for England/Wales as Scottish/Irish holidays are sometimes different
+    */
+
     @JsonProperty("england-and-wales")
     private EnglandAndWales englandAndWales;
 
