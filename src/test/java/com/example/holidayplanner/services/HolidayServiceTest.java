@@ -1,6 +1,5 @@
 package com.example.holidayplanner.services;
 
-import com.example.holidayplanner.publicholidays.Event;
 import com.example.holidayplanner.publicholidays.Root;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -12,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @RunWith(MockitoJUnitRunner.class)
 class HolidayServiceTest {
 
@@ -22,8 +19,6 @@ class HolidayServiceTest {
     @Mock
     private RestTemplate restTemplate;
 
-    @InjectMocks
-    private HolidayService testHolidayService = new HolidayService();
 
     @Test
     void testGetBankHolsJsonFromUrl() {

@@ -59,8 +59,8 @@ public class ThePostStartUpClass {
         /*
         Specify required number BAs/SEs/TAs and total expected business days in project length
         */
-        ProjectRequirements projectOne = new ProjectRequirements(1,
-                2, 1, 14);
+        ProjectRequirements projectOne = new ProjectRequirements(2,
+                2, 2, 14);
 
 
         /*
@@ -70,12 +70,19 @@ public class ThePostStartUpClass {
 
         System.out.println("\n");
 
+        System.out.println("Required numbers of each role:" +
+                "\nBusiness Analysts: " + projectOne.getNoOfBusinessAnalystsRequired() +
+                "\nSoftware Engineers: " + projectOne.getNoOfSoftwareEngineersRequired() +
+                "\nTest Analysts: " + projectOne.getNoOfTestAnalystsRequired());
+
+        System.out.println("\n");
+
 
         /*
         Print out all employees assigned to project based on numbers required above
         */
         System.out.println("Employees assigned to project:");
-        List<EmployeeDetails> projectTeamMembers = employeeService.assignPeopleToProject(projectOne, companyEmployees);
+        employeeService.assignPeopleToProject(projectOne, companyEmployees);
 
         System.out.println("\n");
 
@@ -84,7 +91,9 @@ public class ThePostStartUpClass {
         If a team member is on leave on any days in project life span, this prints out who they are,
         what they do and what day(s) they are on leave that clash with a project day
         */
-        holidayService.determineWhenEmployeeIsOnAnnualLeave(projectTeamMembers);
+//        holidayService.determineWhenEmployeeIsOnAnnualLeave(projectTeamMembers);
+
+//        holidayService.changeStartDateIfTeamMembersNotAvailable(projectTeamMembers);
 
 
     }
