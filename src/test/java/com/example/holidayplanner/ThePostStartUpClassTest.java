@@ -15,8 +15,7 @@ class ThePostStartUpClassTest {
     public void testFigureOutBestStartDateBasedOnTeamMembersAnnualLeave() {
 
         ThePostStartUpClass thePostStartUpClass =
-                new ThePostStartUpClass(null, null, null,
-                        null);
+                new ThePostStartUpClass(null, null, null);
 
 
 //        testEmployeeHolidayDates = thePostStartUpClass.figureOutBestStartDateBasedOnTeamMembersAnnualLeave();

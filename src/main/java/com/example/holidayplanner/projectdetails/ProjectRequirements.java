@@ -7,6 +7,10 @@ import lombok.Data;
 @Data
 public class ProjectRequirements {
 
+    /*
+    These are specified in ThePostStartUp Class
+    */
+
     private int noOfBusinessAnalystsRequired;
     private int noOfSoftwareEngineersRequired;
     private int noOfTestAnalystsRequired;

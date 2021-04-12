@@ -4,16 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @Data
 public class EmployeeDetails {
 
+    /*
+    All relevant employee details
+    */
+
     private String firstName;
     private String lastName;
     private String employeeRole;
-    private LocalDate annualLeaveStartDate;
-    private LocalDate annualLeaveEndDate;
-    private boolean isOnAnnualLeave;
+    private List<LocalDate> daysOnLeave;
 
 }

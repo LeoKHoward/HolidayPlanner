@@ -11,70 +11,75 @@ import java.util.stream.Collectors;
 @Component
 public class EmployeeService {
 
+    /*
+    This class gets the required number of BAs/SEs/TAs specified in ThePostStartUp Class
+    then filters through all available employees in company and moves required numbers
+    into a new list to be used as project team members
+    */
     public List<EmployeeDetails> assignPeopleToProject(ProjectRequirements projectRequirements,
                                                        List<EmployeeDetails> allEmployees) {
 
-        List<EmployeeDetails> teamMembers = new ArrayList<>();
+        /*
+        Create new list to put forward selected employees for the new project
+        */
+        List<EmployeeDetails> projectTeamMembers = new ArrayList<>();
 
-        HolidayService holidayService = new HolidayService();
 
         /*
-        I need to access employee holidays and see if the flag for on annual leave is true
-
-        If it is true then they will be unable to be picked from list below
+        If one employee of a role type is on annual leave across the project dates then need to get next employee
 
         If two are required for a role and one or both is unavailable then project start date needs to move
+        */
 
-         */
 
-
+        /*
+        Filters all BAs to list, gets required number from PostStartUpClass and then adds them to project
+        team members list
+        */
         List<EmployeeDetails> businessAnalysts = allEmployees.stream()
                 .filter(e -> e.getEmployeeRole().equals("Business Analyst"))
                 .limit(projectRequirements.getNoOfBusinessAnalystsRequired())
                 .collect(Collectors.toList());
 
+        projectTeamMembers.addAll(businessAnalysts);
 
-        teamMembers.addAll(businessAnalysts);
 
+        /*
+        Filters all Software Engineers to list, gets required number from PostStartUpClass and then
+        adds them to project team members list
+        */
         List<EmployeeDetails> softwareEngineers = allEmployees.stream()
                 .filter(e -> e.getEmployeeRole().equals("Software Engineer"))
                 .limit(projectRequirements.getNoOfSoftwareEngineersRequired())
                 .collect(Collectors.toList());
 
-        teamMembers.addAll(softwareEngineers);
+        projectTeamMembers.addAll(softwareEngineers);
 
+
+        /*
+        Filters all Test Analysts to list, gets required number from PostStartUpClass and then
+        adds them to project team members list
+        */
         List<EmployeeDetails> testAnalysts = allEmployees.stream()
                 .filter(e -> e.getEmployeeRole().equals("Test Analyst"))
                 .limit(projectRequirements.getNoOfTestAnalystsRequired())
                 .collect(Collectors.toList());
 
-        teamMembers.addAll(testAnalysts);
+        projectTeamMembers.addAll(testAnalysts);
 
 
-        for (EmployeeDetails teamMember : teamMembers) {
-            System.out.println(teamMember.getFirstName() + " " + teamMember.getLastName() + " - "
-                    + teamMember.getEmployeeRole());
+        /*
+        Prints out all team members in the project team member list who have now been assigned
+        */
+        for (EmployeeDetails projectTeamMember : projectTeamMembers) {
+            System.out.println(projectTeamMember.getFirstName() + " " + projectTeamMember.getLastName() + " - "
+                    + projectTeamMember.getEmployeeRole());
         }
 
-        return teamMembers;
+        return projectTeamMembers;
+
 
     }
-
-//    private List<EmployeeDetails> getEmployeeByType(List<EmployeeDetails> allEmployees, String employeeTitle,
-//                                                    int noOfBusinessAnalystsRequired) {
-//        return allEmployees.stream()
-//                .filter(e -> e.getEmployeeRole().equals(employeeTitle))
-//                .limit(noOfBusinessAnalystsRequired)
-//                .collect(Collectors.toList());
-//    }
-
-//    public void chooseDifferentEmployeeIfFirstIsOnLeave() {
-//
-//        HolidayService holidayService = new HolidayService();
-//
-//
-//
-//    }
 
 
 }
