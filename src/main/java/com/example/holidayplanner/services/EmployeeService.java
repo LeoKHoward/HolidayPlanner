@@ -23,8 +23,8 @@ public class EmployeeService {
     then filters through all available employees in company and moves required numbers
     into a new list to be used as project team members
     */
-    public List<EmployeeDetails> assignPeopleToProject(ProjectRequirements projectRequirements,
-                                                       List<EmployeeDetails> allEmployees) {
+    public void assignPeopleToProject(ProjectRequirements projectRequirements,
+                                      List<EmployeeDetails> allEmployees) {
 
 
 
@@ -71,12 +71,12 @@ public class EmployeeService {
         }
 
 
-        return projectTeamMembers;
-
-
     }
 
 
+    /*
+    Doesnt iterate through every day in project, just the first one
+    */
     private void selectBusinessAnalystsNotOnLeave(ProjectRequirements projectRequirements,
                                                   List<EmployeeDetails> allEmployees,
                                                   List<EmployeeDetails> projectTeamMembers,
@@ -190,25 +190,22 @@ public class EmployeeService {
             for (LocalDate dayInProject : daysInProject) {
                 if ((softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
                         && (!softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    softwareEngineers.clear();
                     System.out.println("The Software Engineer " + softwareEngineers.get(0).getFirstName()
                             + " " + softwareEngineers.get(0).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
-//                    softwareEngineers.clear();
+                    softwareEngineers.clear();
                     break;
                 } else if ((!softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
                         && (softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    softwareEngineers.clear();
                     System.out.println("The Software Engineer " + softwareEngineers.get(1).getFirstName()
                             + " " + softwareEngineers.get(1).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
-//                    softwareEngineers.clear();
+                    softwareEngineers.clear();
                     break;
                 } else if ((softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
                         && (softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    softwareEngineers.clear();
                     System.out.println("Both Software Engineers are on leave across the project dates!");
-//                    softwareEngineers.clear();
+                    softwareEngineers.clear();
                     break;
                 } else {
                     System.out.println("You have enough Software Engineers required ("
