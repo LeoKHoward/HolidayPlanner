@@ -59,8 +59,8 @@ public class ThePostStartUpClass {
         /*
         Specify required number BAs/SEs/TAs and total expected business days in project length
         */
-        ProjectRequirements projectOne = new ProjectRequirements(2,
-                2, 2, 14);
+        ProjectRequirements projectOne = new ProjectRequirements(1,
+                1, 1, 14);
 
 
         /*
