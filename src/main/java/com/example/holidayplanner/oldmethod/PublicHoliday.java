@@ -51,12 +51,9 @@ public class PublicHoliday {
         }
 
         // check if Boxing Day
-        if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER && calendar.get(Calendar.DAY_OF_MONTH) == 26) {
-            return true;
-        }
+        return calendar.get(Calendar.MONTH) == Calendar.DECEMBER && calendar.get(Calendar.DAY_OF_MONTH) == 26;
 
         // if none of these it is a work day
-        return false;
 
 
     }

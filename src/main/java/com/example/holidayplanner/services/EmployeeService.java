@@ -74,9 +74,6 @@ public class EmployeeService {
     }
 
 
-    /*
-    Doesnt iterate through every day in project, just the first one
-    */
     private void selectBusinessAnalystsNotOnLeave(ProjectRequirements projectRequirements,
                                                   List<EmployeeDetails> allEmployees,
                                                   List<EmployeeDetails> projectTeamMembers,
@@ -86,138 +83,146 @@ public class EmployeeService {
                 .filter(e -> e.getEmployeeRole().equals("Business Analyst"))
                 .collect(Collectors.toList());
 
+        List<EmployeeDetails> potentialBusinessAnalysts = new ArrayList<>();
+        potentialBusinessAnalysts.add(businessAnalysts.get(0));
+        potentialBusinessAnalysts.add(businessAnalysts.get(1));
 
-        if (projectRequirements.getNoOfBusinessAnalystsRequired() == 1) {
-            for (LocalDate dayInProject : daysInProject) {
+
+        for (LocalDate dayInProject : daysInProject) {
+            if (projectRequirements.getNoOfBusinessAnalystsRequired() == 1) {
+
+
+//                Check if both on leave on same day
                 if ((businessAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (!businessAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    businessAnalysts.remove(0);
-                    System.out.println("You have enough Business Analysts required ("
-                            + projectRequirements.getNoOfBusinessAnalystsRequired() + ") to proceed!");
-                    break;
-                } else if ((!businessAnalysts.get(0).getDaysOnLeave().contains(dayInProject)) &&
-                        (businessAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    businessAnalysts.remove(1);
-                    System.out.println("You have enough Business Analysts required ("
-                            + projectRequirements.getNoOfBusinessAnalystsRequired() + ") to proceed!");
-                    break;
-                } else if ((businessAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
                         && (businessAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    businessAnalysts.clear();
+                    potentialBusinessAnalysts.clear();
                     System.out.println("Both Business Analysts are on leave across the project dates");
                     break;
-                } else {
-                    businessAnalysts.remove(1);
-                    System.out.println("You have enough Business Analysts required ("
-                            + projectRequirements.getNoOfBusinessAnalystsRequired() + ") to proceed!");
-                    break;
-                }
-            }
 
-        } else if (projectRequirements.getNoOfBusinessAnalystsRequired() == 2) {
-            for (LocalDate dayInProject : daysInProject) {
+
+                } else
+                    checkIfRoleTeamMemberOneIsOnLeaveAndTwoIsnt(businessAnalysts, potentialBusinessAnalysts, dayInProject);
+
+
+            } else if (projectRequirements.getNoOfBusinessAnalystsRequired() == 2) {
+
                 if ((businessAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
+                        && (businessAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
+                    System.out.println("Both Business Analysts are on leave across the project dates!");
+                    potentialBusinessAnalysts.clear();
+                    break;
+
+                } else if ((businessAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
                         && (!businessAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
                     System.out.println("The Business Analyst " + businessAnalysts.get(0).getFirstName()
                             + " " + businessAnalysts.get(0).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
-                    businessAnalysts.clear();
+                    potentialBusinessAnalysts.clear();
                     break;
+
                 } else if ((!businessAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
                         && (businessAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
                     System.out.println("The Business Analyst " + businessAnalysts.get(1).getFirstName()
                             + " " + businessAnalysts.get(1).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
-                    businessAnalysts.clear();
+                    potentialBusinessAnalysts.clear();
                     break;
-                } else if ((businessAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (businessAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    System.out.println("Both Business Analysts are on leave across the project dates!");
-                    businessAnalysts.clear();
-                } else {
-                    System.out.println("You have enough Business Analysts required ("
-                            + projectRequirements.getNoOfBusinessAnalystsRequired() + ") to proceed!");
-                    break;
+
                 }
+
             }
         }
 
-        projectTeamMembers.addAll(businessAnalysts);
+        if (projectRequirements.getNoOfBusinessAnalystsRequired() == 1 && potentialBusinessAnalysts.size() == 2) {
+            potentialBusinessAnalysts.remove(1);
+        }
 
-        if (businessAnalysts.size() != projectRequirements.getNoOfBusinessAnalystsRequired()) {
+        if (projectRequirements.getNoOfBusinessAnalystsRequired() == 2 && potentialBusinessAnalysts.size() == 2) {
+            System.out.println("You have enough Business Analysts required ("
+                    + projectRequirements.getNoOfBusinessAnalystsRequired() + ") to proceed!");
+        }
+
+        projectTeamMembers.addAll(potentialBusinessAnalysts);
+
+        if (potentialBusinessAnalysts.size() != projectRequirements.getNoOfBusinessAnalystsRequired()) {
             System.out.println("You do not have enough Business Analysts free " +
                     "(" + projectRequirements.getNoOfBusinessAnalystsRequired() + ") to complete your project!");
         }
+
     }
 
-    public void selectSoftwareEngineersNotOnLeave(ProjectRequirements projectRequirements,
-                                                  List<EmployeeDetails> allEmployees,
-                                                  List<EmployeeDetails> projectTeamMembers,
-                                                  List<LocalDate> daysInProject) {
+
+    private void selectSoftwareEngineersNotOnLeave(ProjectRequirements projectRequirements,
+                                                   List<EmployeeDetails> allEmployees,
+                                                   List<EmployeeDetails> projectTeamMembers,
+                                                   List<LocalDate> daysInProject) {
 
         List<EmployeeDetails> softwareEngineers = allEmployees.stream()
                 .filter(e -> e.getEmployeeRole().equals("Software Engineer"))
                 .collect(Collectors.toList());
 
+        List<EmployeeDetails> potentialSoftwareEngineers = new ArrayList<>();
+        potentialSoftwareEngineers.add(softwareEngineers.get(0));
+        potentialSoftwareEngineers.add(softwareEngineers.get(1));
 
-        if (projectRequirements.getNoOfSoftwareEngineersRequired() == 1) {
-            for (LocalDate dayInProject : daysInProject) {
+
+        for (LocalDate dayInProject : daysInProject) {
+            if (projectRequirements.getNoOfSoftwareEngineersRequired() == 1) {
+
+
+//                Check if both on leave on same day
                 if ((softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (!softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    softwareEngineers.remove(0);
-                    System.out.println("You have enough Software Engineers required ("
-                            + projectRequirements.getNoOfSoftwareEngineersRequired() + ") to proceed!");
-                    break;
-                } else if ((!softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject)) &&
-                        (softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    softwareEngineers.remove(1);
-                    System.out.println("You have enough Software Engineers required ("
-                            + projectRequirements.getNoOfSoftwareEngineersRequired() + ") to proceed!");
-                    break;
-                } else if ((softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
                         && (softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    softwareEngineers.clear();
+                    potentialSoftwareEngineers.clear();
                     System.out.println("Both Software Engineers are on leave across the project dates");
                     break;
-                } else {
-                    softwareEngineers.remove(1);
-                    System.out.println("You have enough Software Engineers required ("
-                            + projectRequirements.getNoOfSoftwareEngineersRequired() + ") to proceed!");
-                    break;
-                }
-            }
-        } else if (projectRequirements.getNoOfSoftwareEngineersRequired() == 2) {
-            for (LocalDate dayInProject : daysInProject) {
+
+
+                } else
+                    checkIfRoleTeamMemberOneIsOnLeaveAndTwoIsnt(softwareEngineers, potentialSoftwareEngineers, dayInProject);
+
+
+            } else if (projectRequirements.getNoOfSoftwareEngineersRequired() == 2) {
+
                 if ((softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
+                        && (softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
+                    System.out.println("Both Software Engineers are on leave across the project dates!");
+                    potentialSoftwareEngineers.clear();
+                    break;
+
+                } else if ((softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
                         && (!softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
                     System.out.println("The Software Engineer " + softwareEngineers.get(0).getFirstName()
                             + " " + softwareEngineers.get(0).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
-                    softwareEngineers.clear();
+                    potentialSoftwareEngineers.clear();
                     break;
+
                 } else if ((!softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
                         && (softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
                     System.out.println("The Software Engineer " + softwareEngineers.get(1).getFirstName()
                             + " " + softwareEngineers.get(1).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
-                    softwareEngineers.clear();
+                    potentialSoftwareEngineers.clear();
                     break;
-                } else if ((softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    System.out.println("Both Software Engineers are on leave across the project dates!");
-                    softwareEngineers.clear();
-                    break;
-                } else {
-                    System.out.println("You have enough Software Engineers required ("
-                            + projectRequirements.getNoOfSoftwareEngineersRequired() + ") to proceed!");
-                    break;
+
                 }
+
             }
         }
 
-        projectTeamMembers.addAll(softwareEngineers);
+        if (projectRequirements.getNoOfSoftwareEngineersRequired() == 1 && potentialSoftwareEngineers.size() == 2) {
+            potentialSoftwareEngineers.remove(1);
+        }
 
-        if (softwareEngineers.size() != projectRequirements.getNoOfSoftwareEngineersRequired()) {
+        if (projectRequirements.getNoOfSoftwareEngineersRequired() == 2 && potentialSoftwareEngineers.size() == 2) {
+            System.out.println("You have enough Software Engineers required ("
+                    + projectRequirements.getNoOfSoftwareEngineersRequired() + ") to proceed!");
+        }
+
+        projectTeamMembers.addAll(potentialSoftwareEngineers);
+
+        if (potentialSoftwareEngineers.size() != projectRequirements.getNoOfSoftwareEngineersRequired()) {
             System.out.println("You do not have enough Software Engineers free " +
                     "(" + projectRequirements.getNoOfSoftwareEngineersRequired() + ") to complete your project!");
         }
@@ -225,77 +230,102 @@ public class EmployeeService {
     }
 
 
-    public void selectTestAnalystsNotOnLeave(ProjectRequirements projectRequirements,
-                                             List<EmployeeDetails> allEmployees,
-                                             List<EmployeeDetails> projectTeamMembers,
-                                             List<LocalDate> daysInProject) {
+    private void selectTestAnalystsNotOnLeave(ProjectRequirements projectRequirements,
+                                              List<EmployeeDetails> allEmployees,
+                                              List<EmployeeDetails> projectTeamMembers,
+                                              List<LocalDate> daysInProject) {
 
         List<EmployeeDetails> testAnalysts = allEmployees.stream()
                 .filter(e -> e.getEmployeeRole().equals("Test Analyst"))
                 .collect(Collectors.toList());
 
-        if (projectRequirements.getNoOfTestAnalystsRequired() == 1) {
-            for (LocalDate dayInProject : daysInProject) {
+        List<EmployeeDetails> potentialTestAnalysts = new ArrayList<>();
+        potentialTestAnalysts.add(testAnalysts.get(0));
+        potentialTestAnalysts.add(testAnalysts.get(1));
+
+
+//        Stops before looping through every date in project
+
+        for (LocalDate dayInProject : daysInProject) {
+            if (projectRequirements.getNoOfTestAnalystsRequired() == 1) {
+
+
+//                Check if both on leave on same day
                 if ((testAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (!testAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    testAnalysts.remove(0);
-                    System.out.println("You have enough Test Analysts required ("
-                            + projectRequirements.getNoOfTestAnalystsRequired() + ") to proceed!");
-                    break;
-                } else if ((!testAnalysts.get(0).getDaysOnLeave().contains(dayInProject)) &&
-                        (testAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    testAnalysts.remove(1);
-                    System.out.println("You have enough Test Analysts required ("
-                            + projectRequirements.getNoOfTestAnalystsRequired() + ") to proceed!");
-                    break;
-                } else if ((testAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
                         && (testAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    testAnalysts.clear();
+                    potentialTestAnalysts.clear();
                     System.out.println("Both Test Analysts are on leave across the project dates");
                     break;
-                } else {
-                    testAnalysts.remove(1);
-                    System.out.println("You have enough Test Analysts required ("
-                            + projectRequirements.getNoOfTestAnalystsRequired() + ") to proceed!");
-                    break;
-                }
-            }
 
-        } else if (projectRequirements.getNoOfTestAnalystsRequired() == 2) {
-            for (LocalDate dayInProject : daysInProject) {
+
+                } else {
+                    checkIfRoleTeamMemberOneIsOnLeaveAndTwoIsnt(testAnalysts, potentialTestAnalysts, dayInProject);
+                }
+
+
+            } else if (projectRequirements.getNoOfTestAnalystsRequired() == 2) {
+
                 if ((testAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
+                        && (testAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
+                    System.out.println("Both Test Analysts are on leave across the project dates!");
+                    potentialTestAnalysts.clear();
+                    break;
+
+                } else if ((testAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
                         && (!testAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
                     System.out.println("The Test Analyst " + testAnalysts.get(0).getFirstName()
                             + " " + testAnalysts.get(0).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
-                    testAnalysts.clear();
+                    potentialTestAnalysts.clear();
                     break;
+
                 } else if ((!testAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
                         && (testAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
                     System.out.println("The Test Analyst " + testAnalysts.get(1).getFirstName()
                             + " " + testAnalysts.get(1).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
-                    testAnalysts.clear();
+                    potentialTestAnalysts.clear();
                     break;
-                } else if ((testAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (testAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
-                    System.out.println("Both Test Analysts are on leave across the project dates!");
-                    testAnalysts.clear();
-                } else {
-                    System.out.println("You have enough Test Analysts required ("
-                            + projectRequirements.getNoOfTestAnalystsRequired() + ") to proceed!");
-                    break;
+
                 }
+
             }
         }
 
-        projectTeamMembers.addAll(testAnalysts);
+        if (projectRequirements.getNoOfTestAnalystsRequired() == 1 && potentialTestAnalysts.size() == 2) {
+            potentialTestAnalysts.remove(1);
+        }
 
-        if (testAnalysts.size() != projectRequirements.getNoOfTestAnalystsRequired()) {
+        if (projectRequirements.getNoOfTestAnalystsRequired() == 2 && potentialTestAnalysts.size() == 2) {
+            System.out.println("You have enough Test Analysts required ("
+                    + projectRequirements.getNoOfTestAnalystsRequired() + ") to proceed!");
+        }
+
+        projectTeamMembers.addAll(potentialTestAnalysts);
+
+        if (potentialTestAnalysts.size() != projectRequirements.getNoOfTestAnalystsRequired()) {
             System.out.println("You do not have enough Test Analysts free " +
                     "(" + projectRequirements.getNoOfTestAnalystsRequired() + ") to complete your project!");
         }
 
+    }
+
+    private void checkIfRoleTeamMemberOneIsOnLeaveAndTwoIsnt(List<EmployeeDetails> teamMemberRole,
+                                                             List<EmployeeDetails> potentialTeamMemberRole,
+                                                             LocalDate dayInProject) {
+
+        if ((teamMemberRole.get(0).getDaysOnLeave().contains(dayInProject))
+                && (!teamMemberRole.get(1).getDaysOnLeave().contains(dayInProject))
+                && potentialTeamMemberRole.contains(teamMemberRole.get(0))) {
+            potentialTeamMemberRole.remove(0);
+
+
+        } else if ((!teamMemberRole.get(0).getDaysOnLeave().contains(dayInProject)) &&
+                (teamMemberRole.get(1).getDaysOnLeave().contains(dayInProject))
+                && potentialTeamMemberRole.contains(teamMemberRole.get(1))) {
+            int index = potentialTeamMemberRole.size() - 1;
+            potentialTeamMemberRole.remove(index);
+        }
     }
 
 
