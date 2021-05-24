@@ -91,6 +91,7 @@ public class HolidayService {
         */
         newProjectDetails.setAllDaysInProjectLifeSpan(daysInProjectLifespan);
 
+
         System.out.println(getAllDaysInProjectLifeSpan());
 
         /*

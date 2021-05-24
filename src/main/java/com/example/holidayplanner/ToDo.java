@@ -13,6 +13,8 @@ public class ToDo {
     If there is no free period, it should make other suggestions, and say how many days will be lost,
     and calculate when the project end date will be, taking into account lost days
 
+    Tests
+
      */
 
 

@@ -1,10 +1,8 @@
 package com.example.holidayplanner.employee;
 
-import com.example.holidayplanner.employee.EmployeeDetails;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -14,17 +12,16 @@ public class EmployeeSetUp {
     Create a company of employees
     */
 
-    public List<EmployeeDetails> getAllEmployeeDetails() {
+    public EmployeeDetails[] getAllEmployeeDetails() {
         EmployeeDetails employee1 =
                 new EmployeeDetails(
                         "Jack",
                         "Sparrow",
                         "Business Analyst",
-                        (List.of(LocalDate.of(2021, 1, 4),
-                                LocalDate.of(2021, 1, 5),
-                                LocalDate.of(2021, 1, 6),
-                                LocalDate.of(2021, 1, 7),
-                                LocalDate.of(2021, 1, 8),
+                        (List.of(
+                                LocalDate.of(2021, 11, 4),
+                                LocalDate.of(2021, 11, 6),
+                                LocalDate.of(2021, 11, 7),
                                 LocalDate.of(2021, 2, 1),
                                 LocalDate.of(2021, 2, 2),
                                 LocalDate.of(2021, 2, 3),
@@ -45,9 +42,8 @@ public class EmployeeSetUp {
                         "Edward",
                         "Scissorhands",
                         "Business Analyst",
-                        (List.of(LocalDate.of(2021, 9, 11),
-                                LocalDate.of(2021, 9, 12),
-                                LocalDate.of(2021, 9, 13),
+                        (List.of(LocalDate.of(2021, 1, 4),
+                                LocalDate.of(2021, 1, 5),
                                 LocalDate.of(2021, 9, 14),
                                 LocalDate.of(2021, 9, 15),
                                 LocalDate.of(2021, 2, 8),
@@ -120,7 +116,7 @@ public class EmployeeSetUp {
                         "Barnabas",
                         "Collins",
                         "Test Analyst",
-                        (List.of(LocalDate.of(2021, 5, 17),
+                        (List.of(LocalDate.of(2021, 1, 17),
                                 LocalDate.of(2021, 5, 18),
                                 LocalDate.of(2021, 5, 19),
                                 LocalDate.of(2021, 5, 20),
@@ -145,7 +141,7 @@ public class EmployeeSetUp {
                         "Johnny",
                         "Depp",
                         "Test Analyst",
-                        (List.of(LocalDate.of(2021, 5, 24),
+                        (List.of(LocalDate.of(2021, 11, 18),
                                 LocalDate.of(2021, 5, 25),
                                 LocalDate.of(2021, 5, 26),
                                 LocalDate.of(2021, 5, 27),
@@ -167,16 +163,14 @@ public class EmployeeSetUp {
                                 LocalDate.of(2021, 8, 27))));
 
 
+
+
         /*
         Add all created employees to a master employee list
         */
-        List<EmployeeDetails> employees = new ArrayList<>();
-        employees.add(employee1);
-        employees.add(employee2);
-        employees.add(employee3);
-        employees.add(employee4);
-        employees.add(employee5);
-        employees.add(employee6);
+
+        EmployeeDetails[] employees = {employee1, employee2, employee3, employee4, employee5, employee6};
+
 
         return employees;
 

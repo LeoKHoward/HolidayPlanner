@@ -9,6 +9,7 @@ import com.example.holidayplanner.services.HolidayService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -49,7 +50,7 @@ public class ThePostStartUpClass {
         System.out.println("\n");
 
         /*
-        Print out all employees in the company
+        Print out all employees and their details in the company
         */
         List<EmployeeDetails> companyEmployees = getAllCompanyEmployeeDetails();
 
@@ -59,17 +60,20 @@ public class ThePostStartUpClass {
         /*
         Specify required number BAs/SEs/TAs and total expected business days in project length
         */
-        ProjectRequirements projectOne = new ProjectRequirements(1,
-                1, 1, 14);
+        ProjectRequirements projectOne = new ProjectRequirements(2,
+                2, 2, 6);
 
 
         /*
-        Print out all employees in the company
+        Print out days in project/start date/end date/whether its across bank holidays
         */
         holidayService.workoutProjectEndDateAndIfItIncludesBankHols(projectOne, bankHols);
 
         System.out.println("\n");
 
+        /*
+        Print out required team member numbers for project
+        */
         System.out.println("Required numbers of each role:" +
                 "\nBusiness Analysts: " + projectOne.getNoOfBusinessAnalystsRequired() +
                 "\nSoftware Engineers: " + projectOne.getNoOfSoftwareEngineersRequired() +
@@ -81,7 +85,7 @@ public class ThePostStartUpClass {
         /*
         Print out all employees assigned to project based on numbers required above
         */
-        System.out.println("Employees assigned to project:");
+        System.out.println("Employees assigned to project:\n");
         employeeService.assignPeopleToProject(projectOne, companyEmployees);
 
         System.out.println("\n");
@@ -114,7 +118,7 @@ public class ThePostStartUpClass {
     Get details of all employees at company that could potentially be chosen to be in the team
     */
     private List<EmployeeDetails> getAllCompanyEmployeeDetails() {
-        List<EmployeeDetails> companyEmployees = employeeSetUp.getAllEmployeeDetails();
+        List<EmployeeDetails> companyEmployees = Arrays.asList(employeeSetUp.getAllEmployeeDetails());
 
         for (EmployeeDetails companyEmployee : companyEmployees) {
             System.out.println(companyEmployee);
