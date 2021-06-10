@@ -5,7 +5,6 @@
 //import org.junit.jupiter.api.Test;
 //
 //import java.time.LocalDate;
-//import java.util.ArrayList;
 //import java.util.List;
 //
 //import static org.assertj.core.api.Assertions.assertThat;
@@ -15,33 +14,42 @@
 //    @Test
 //    public void testAssignPeopleToProject() {
 //
-//        List<EmployeeDetails> testEmployeeDetails = testEmployeeDetailData();
+//        HolidayService holidayService = new HolidayService();
+//
+////        List<EmployeeDetails> testEmployeeDetails = testEmployeeDetailData();
 //
 //        ProjectRequirements testProject = new ProjectRequirements(1,
-//                2, 1, 60);
+//                1, 1, 3,
+//                10);
 //
-//        EmployeeService testEmployeeService = new EmployeeService();
+//        EmployeeService testEmployeeService = new EmployeeService(holidayService);
 //
-//        List<EmployeeDetails> result = testEmployeeService.assignPeopleToProject(testProject, testEmployeeDetails);
 //
-//        assertThat(result.size()).isEqualTo(4);
+////        testEmployeeService.assignPeopleToProject(testProject, testEmployeeDetailData());
 //
-//        EmployeeDetails businessAnalyst = result.get(0);
-//        assertThat(businessAnalyst.getFirstName()).isEqualTo("Jack");
 //
-//        EmployeeDetails softwareEngineer1 = result.get(1);
-//        assertThat(softwareEngineer1.getFirstName()).isEqualTo("Willy");
 //
-//        EmployeeDetails softwareEngineer2 = result.get(2);
-//        assertThat(softwareEngineer2.getFirstName()).isEqualTo("Sweeney");
 //
-//        EmployeeDetails testAnalyst = result.get(3);
-//        assertThat(testAnalyst.getFirstName()).isEqualTo("Barnabas");
+//
+//
+////        assertThat(result.size()).isEqualTo(3);
+////
+////        EmployeeDetails businessAnalyst = result.get(0);
+////        assertThat(businessAnalyst.getFirstName()).isEqualTo("Jack");
+////
+////        EmployeeDetails softwareEngineer1 = result.get(1);
+////        assertThat(softwareEngineer1.getFirstName()).isEqualTo("Willy");
+////
+////        EmployeeDetails softwareEngineer2 = result.get(2);
+////        assertThat(softwareEngineer2.getFirstName()).isEqualTo("Sweeney");
+////
+////        EmployeeDetails testAnalyst = result.get(3);
+////        assertThat(testAnalyst.getFirstName()).isEqualTo("Barnabas");
 //
 //
 //    }
 //
-//    private List<EmployeeDetails> testEmployeeDetailData() {
+//    private EmployeeDetails[] testEmployeeDetailData() {
 //        EmployeeDetails employee1 =
 //                new EmployeeDetails(
 //                        "Jack",
@@ -103,13 +111,8 @@
 //                                LocalDate.of(2021, 5, 27),
 //                                LocalDate.of(2021, 5, 28))));
 //
-//        List<EmployeeDetails> testEmployeesList = new ArrayList<>();
-//        testEmployeesList.add(employee1);
-//        testEmployeesList.add(employee2);
-//        testEmployeesList.add(employee3);
-//        testEmployeesList.add(employee4);
-//        testEmployeesList.add(employee5);
-//        testEmployeesList.add(employee6);
+//
+//        EmployeeDetails[] testEmployeesList = {employee1, employee2, employee3, employee4, employee5, employee6};
 //
 //        return testEmployeesList;
 //
