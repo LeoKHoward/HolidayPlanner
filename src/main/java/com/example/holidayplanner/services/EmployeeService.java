@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 @Component
 public class EmployeeService {
 
-    private final HolidayService holidayService;
+    public static HolidayService holidayService;
 
     public EmployeeService(HolidayService holidayService) {
-        this.holidayService = holidayService;
+        EmployeeService.holidayService = holidayService;
     }
 
     /*
@@ -83,45 +83,36 @@ public class EmployeeService {
                 .filter(e -> e.getEmployeeRole().equals("Business Analyst"))
                 .collect(Collectors.toList());
 
-        List<EmployeeDetails> potentialBusinessAnalysts = new ArrayList<>();
-        potentialBusinessAnalysts.add(businessAnalysts.get(0));
-        potentialBusinessAnalysts.add(businessAnalysts.get(1));
+        List<EmployeeDetails> potentialBusinessAnalysts = addPotentialTeamMembersToList(businessAnalysts);
 
 
         for (LocalDate dayInProject : daysInProject) {
             if (projectRequirements.getNoOfBusinessAnalystsRequired() == 1) {
 
-
-//                Check if both on leave on same day
-                if ((businessAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (businessAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
+                if (bothTeamMembersOfSameRoleOnLeaveAcrossProjectDates(businessAnalysts, dayInProject)) {
                     potentialBusinessAnalysts.clear();
                     System.out.println("Both Business Analysts are on leave across the project dates");
                     break;
 
-
                 } else
-                    checkIfRoleTeamMemberOneIsOnLeaveAndTwoIsnt(businessAnalysts, potentialBusinessAnalysts, dayInProject);
-
+                    teamMemberOneOnLeaveAndTwoIsNotWhereRequiredNumberIsOne(businessAnalysts,
+                            potentialBusinessAnalysts, dayInProject);
 
             } else if (projectRequirements.getNoOfBusinessAnalystsRequired() == 2) {
 
-                if ((businessAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (businessAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
+                if (bothTeamMembersOfSameRoleOnLeaveAcrossProjectDates(businessAnalysts, dayInProject)) {
                     System.out.println("Both Business Analysts are on leave across the project dates!");
                     potentialBusinessAnalysts.clear();
                     break;
 
-                } else if ((businessAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (!businessAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
+                } else if (teamRoleMemberOneOnLeaveButTwoIsNot(businessAnalysts, dayInProject)) {
                     System.out.println("The Business Analyst " + businessAnalysts.get(0).getFirstName()
                             + " " + businessAnalysts.get(0).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
                     potentialBusinessAnalysts.clear();
                     break;
 
-                } else if ((!businessAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (businessAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
+                } else if (teamRoleMemberTwoOnLeaveButOneIsNot(businessAnalysts, dayInProject)) {
                     System.out.println("The Business Analyst " + businessAnalysts.get(1).getFirstName()
                             + " " + businessAnalysts.get(1).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
@@ -129,7 +120,6 @@ public class EmployeeService {
                     break;
 
                 }
-
             }
         }
 
@@ -161,45 +151,37 @@ public class EmployeeService {
                 .filter(e -> e.getEmployeeRole().equals("Software Engineer"))
                 .collect(Collectors.toList());
 
-        List<EmployeeDetails> potentialSoftwareEngineers = new ArrayList<>();
-        potentialSoftwareEngineers.add(softwareEngineers.get(0));
-        potentialSoftwareEngineers.add(softwareEngineers.get(1));
+        List<EmployeeDetails> potentialSoftwareEngineers = addPotentialTeamMembersToList(softwareEngineers);
 
 
         for (LocalDate dayInProject : daysInProject) {
             if (projectRequirements.getNoOfSoftwareEngineersRequired() == 1) {
 
-
-//                Check if both on leave on same day
-                if ((softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
+                if (bothTeamMembersOfSameRoleOnLeaveAcrossProjectDates(softwareEngineers, dayInProject)) {
                     potentialSoftwareEngineers.clear();
                     System.out.println("Both Software Engineers are on leave across the project dates");
                     break;
 
-
                 } else
-                    checkIfRoleTeamMemberOneIsOnLeaveAndTwoIsnt(softwareEngineers, potentialSoftwareEngineers, dayInProject);
+                    teamMemberOneOnLeaveAndTwoIsNotWhereRequiredNumberIsOne(softwareEngineers,
+                            potentialSoftwareEngineers, dayInProject);
 
 
             } else if (projectRequirements.getNoOfSoftwareEngineersRequired() == 2) {
 
-                if ((softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
+                if (bothTeamMembersOfSameRoleOnLeaveAcrossProjectDates(softwareEngineers, dayInProject)) {
                     System.out.println("Both Software Engineers are on leave across the project dates!");
                     potentialSoftwareEngineers.clear();
                     break;
 
-                } else if ((softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (!softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
+                } else if (teamRoleMemberOneOnLeaveButTwoIsNot(softwareEngineers, dayInProject)) {
                     System.out.println("The Software Engineer " + softwareEngineers.get(0).getFirstName()
                             + " " + softwareEngineers.get(0).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
                     potentialSoftwareEngineers.clear();
                     break;
 
-                } else if ((!softwareEngineers.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (softwareEngineers.get(1).getDaysOnLeave().contains(dayInProject))) {
+                } else if (teamRoleMemberTwoOnLeaveButOneIsNot(softwareEngineers, dayInProject)) {
                     System.out.println("The Software Engineer " + softwareEngineers.get(1).getFirstName()
                             + " " + softwareEngineers.get(1).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
@@ -207,7 +189,6 @@ public class EmployeeService {
                     break;
 
                 }
-
             }
         }
 
@@ -226,7 +207,6 @@ public class EmployeeService {
             System.out.println("You do not have enough Software Engineers free " +
                     "(" + projectRequirements.getNoOfSoftwareEngineersRequired() + ") to complete your project!");
         }
-
     }
 
 
@@ -239,48 +219,36 @@ public class EmployeeService {
                 .filter(e -> e.getEmployeeRole().equals("Test Analyst"))
                 .collect(Collectors.toList());
 
-        List<EmployeeDetails> potentialTestAnalysts = new ArrayList<>();
-        potentialTestAnalysts.add(testAnalysts.get(0));
-        potentialTestAnalysts.add(testAnalysts.get(1));
-
-
-//        Stops before looping through every date in project
+        List<EmployeeDetails> potentialTestAnalysts = addPotentialTeamMembersToList(testAnalysts);
 
         for (LocalDate dayInProject : daysInProject) {
             if (projectRequirements.getNoOfTestAnalystsRequired() == 1) {
 
-
-//                Check if both on leave on same day
-                if ((testAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (testAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
+                if (bothTeamMembersOfSameRoleOnLeaveAcrossProjectDates(testAnalysts, dayInProject)) {
                     potentialTestAnalysts.clear();
                     System.out.println("Both Test Analysts are on leave across the project dates");
                     break;
 
-
                 } else {
-                    checkIfRoleTeamMemberOneIsOnLeaveAndTwoIsnt(testAnalysts, potentialTestAnalysts, dayInProject);
+                    teamMemberOneOnLeaveAndTwoIsNotWhereRequiredNumberIsOne(testAnalysts,
+                            potentialTestAnalysts, dayInProject);
                 }
-
 
             } else if (projectRequirements.getNoOfTestAnalystsRequired() == 2) {
 
-                if ((testAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (testAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
+                if (bothTeamMembersOfSameRoleOnLeaveAcrossProjectDates(testAnalysts, dayInProject)) {
                     System.out.println("Both Test Analysts are on leave across the project dates!");
                     potentialTestAnalysts.clear();
                     break;
 
-                } else if ((testAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (!testAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
+                } else if (teamRoleMemberOneOnLeaveButTwoIsNot(testAnalysts, dayInProject)) {
                     System.out.println("The Test Analyst " + testAnalysts.get(0).getFirstName()
                             + " " + testAnalysts.get(0).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
                     potentialTestAnalysts.clear();
                     break;
 
-                } else if ((!testAnalysts.get(0).getDaysOnLeave().contains(dayInProject))
-                        && (testAnalysts.get(1).getDaysOnLeave().contains(dayInProject))) {
+                } else if (teamRoleMemberTwoOnLeaveButOneIsNot(testAnalysts, dayInProject)) {
                     System.out.println("The Test Analyst " + testAnalysts.get(1).getFirstName()
                             + " " + testAnalysts.get(1).getLastName() + " is on leave across the date of " +
                             "the project! You must have two available in order to begin work!");
@@ -288,7 +256,6 @@ public class EmployeeService {
                     break;
 
                 }
-
             }
         }
 
@@ -307,25 +274,45 @@ public class EmployeeService {
             System.out.println("You do not have enough Test Analysts free " +
                     "(" + projectRequirements.getNoOfTestAnalystsRequired() + ") to complete your project!");
         }
-
     }
 
-    private void checkIfRoleTeamMemberOneIsOnLeaveAndTwoIsnt(List<EmployeeDetails> teamMemberRole,
-                                                             List<EmployeeDetails> potentialTeamMemberRole,
-                                                             LocalDate dayInProject) {
+    private List<EmployeeDetails> addPotentialTeamMembersToList(List<EmployeeDetails> teamMemberRole) {
+        List<EmployeeDetails> potentialTeamMemberRole = new ArrayList<>();
+        potentialTeamMemberRole.add(teamMemberRole.get(0));
+        potentialTeamMemberRole.add(teamMemberRole.get(1));
+        return potentialTeamMemberRole;
+    }
 
-        if ((teamMemberRole.get(0).getDaysOnLeave().contains(dayInProject))
-                && (!teamMemberRole.get(1).getDaysOnLeave().contains(dayInProject))
+    private void teamMemberOneOnLeaveAndTwoIsNotWhereRequiredNumberIsOne(List<EmployeeDetails> teamMemberRole,
+                                                                         List<EmployeeDetails> potentialTeamMemberRole,
+                                                                         LocalDate dayInProject) {
+
+        if (teamRoleMemberOneOnLeaveButTwoIsNot(teamMemberRole, dayInProject)
                 && potentialTeamMemberRole.contains(teamMemberRole.get(0))) {
             potentialTeamMemberRole.remove(0);
 
 
-        } else if ((!teamMemberRole.get(0).getDaysOnLeave().contains(dayInProject)) &&
-                (teamMemberRole.get(1).getDaysOnLeave().contains(dayInProject))
+        } else if (teamRoleMemberTwoOnLeaveButOneIsNot(teamMemberRole, dayInProject)
                 && potentialTeamMemberRole.contains(teamMemberRole.get(1))) {
             int index = potentialTeamMemberRole.size() - 1;
             potentialTeamMemberRole.remove(index);
         }
+    }
+
+    private boolean teamRoleMemberOneOnLeaveButTwoIsNot(List<EmployeeDetails> teamMemberRole, LocalDate dayInProject) {
+        return (teamMemberRole.get(0).getDaysOnLeave().contains(dayInProject))
+                && (!teamMemberRole.get(1).getDaysOnLeave().contains(dayInProject));
+    }
+
+    private boolean teamRoleMemberTwoOnLeaveButOneIsNot(List<EmployeeDetails> teamMemberRole, LocalDate dayInProject) {
+        return (!teamMemberRole.get(0).getDaysOnLeave().contains(dayInProject))
+                && (teamMemberRole.get(1).getDaysOnLeave().contains(dayInProject));
+    }
+
+    private boolean bothTeamMembersOfSameRoleOnLeaveAcrossProjectDates(List<EmployeeDetails> teamMemberRole,
+                                                                       LocalDate dayInProject) {
+        return (teamMemberRole.get(0).getDaysOnLeave().contains(dayInProject))
+                && (teamMemberRole.get(1).getDaysOnLeave().contains(dayInProject));
     }
 
 

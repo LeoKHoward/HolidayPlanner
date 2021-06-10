@@ -1,6 +1,5 @@
 package com.example.holidayplanner.services;
 
-import com.example.holidayplanner.employee.EmployeeDetails;
 import com.example.holidayplanner.projectdetails.NewProjectDetails;
 import com.example.holidayplanner.projectdetails.ProjectRequirements;
 import com.example.holidayplanner.publicholidays.Event;
@@ -59,26 +58,8 @@ public class HolidayService {
 
         int businessDays = 0;
 
-        while (businessDays < projectRequirements.getExpectedProjectLengthInDays()) {
-
-            rangeOfDaysInProjectLifeSpan = rangeOfDaysInProjectLifeSpan.plusDays(1);
-
-            /*
-            If any day in project is a saturday/sunday/bank holiday then ignore it
-            */
-            if (!(rangeOfDaysInProjectLifeSpan.getDayOfWeek() == DayOfWeek.SATURDAY
-                    || rangeOfDaysInProjectLifeSpan.getDayOfWeek() == DayOfWeek.SUNDAY
-                    || isDateBankHol(rangeOfDaysInProjectLifeSpan, bankHols))) {
-                ++businessDays;
-
-                /*
-                Add all business days to the list daysInProjectLifespan
-                */
-                daysInProjectLifespan.add(rangeOfDaysInProjectLifeSpan);
-
-            }
-
-        }
+        getDaysInProject(projectRequirements, bankHols, rangeOfDaysInProjectLifeSpan, daysInProjectLifespan,
+                businessDays);
 
 
         /*
@@ -119,24 +100,34 @@ public class HolidayService {
 
     }
 
+    private void getDaysInProject(ProjectRequirements projectRequirements, List<Event> bankHols,
+                                  LocalDate rangeOfDaysInProjectLifeSpan, List<LocalDate> daysInProjectLifespan,
+                                  int businessDays) {
+        while (businessDays < projectRequirements.getExpectedProjectLengthInDays()) {
+
+            rangeOfDaysInProjectLifeSpan = rangeOfDaysInProjectLifeSpan.plusDays(1);
+
+            /*
+            If any day in project is a saturday/sunday/bank holiday then ignore it
+            */
+            if (!(rangeOfDaysInProjectLifeSpan.getDayOfWeek() == DayOfWeek.SATURDAY
+                    || rangeOfDaysInProjectLifeSpan.getDayOfWeek() == DayOfWeek.SUNDAY
+                    || isDateBankHol(rangeOfDaysInProjectLifeSpan, bankHols))) {
+                ++businessDays;
+
+                /*
+                Add all business days to the list daysInProjectLifespan
+                */
+                daysInProjectLifespan.add(rangeOfDaysInProjectLifeSpan);
+
+            }
+
+        }
+    }
+
     public List<LocalDate> getAllDaysInProjectLifeSpan() {
         return newProjectDetails.getAllDaysInProjectLifeSpan();
     }
-
-    public void changeStartDateIfTeamMembersNotAvailable(List<EmployeeDetails> projectTeamMembers) {
-
-        LocalDate addOneDay = startOfYear.plusDays(1);
-
-        for (EmployeeDetails projectTeamMember : projectTeamMembers) {
-            if ((!projectTeamMember.getEmployeeRole().contains("Business")) ||
-                    (!projectTeamMember.getEmployeeRole().contains("Software")) ||
-                    (!projectTeamMember.getEmployeeRole().contains("Test"))) {
-                startOfYear.plusDays(1);
-            }
-        }
-
-    }
-
 
 
     /*
@@ -158,5 +149,6 @@ public class HolidayService {
                         && bh.getDate().isBefore(endDate.plusDays(1)))
                 .map(Event::getTitle).collect(Collectors.toList());
     }
+
 
 }
